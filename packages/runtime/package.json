@@ -1,6 +1,6 @@
 {
   "name": "@repo/runtime",
-  "version": "0.0.2",
+  "version": "0.1.5",
   "private": true,
   "type": "module",
   "scripts": {
@@ -36,6 +36,8 @@
     "@repo/logger": "workspace:*",
     "zod": "catalog:",
     "cron-parser": "catalog:",
-    "@json-render/core": "catalog:"
+    "@json-render/core": "catalog:",
+    "@trycua/cua": "catalog:",
+    "playwright-core": "catalog:"
   }
 }

@@ -33,6 +33,10 @@ export const desktopCopyMessage = z.object({ data: z.object({ detail: z.object({
 
 export const desktopTitleBarMessage = z.object({ data: z.object({ detail: z.object({ titleBar: z.literal('double-click') }) }) });
 
+export const desktopUpdateMessage = z.object({ data: z.object({ detail: z.object({ update: z.enum(['check', 'apply']) }) }) });
+
+export const desktopUpdatePrepared = z.object({ retained_tar_path: z.string() });
+
 export const desktopNewWindow = z.object({ data: z.object({ detail: z.object({ url: z.url({ protocol: /^https?$/u }) }) }) });
 
 export const desktopSettings = z.object({
@@ -89,6 +93,7 @@ export interface DesktopOrigins {
 export interface DesktopServer extends DesktopOrigins {
   url: string;
   daemonEntry: string[];
+  canAutoPair: boolean;
   port: number;
   portFallback: boolean;
   exited: Promise<number>;
@@ -130,4 +135,14 @@ export interface DesktopRPC {
     messages: Record<never, never>;
   }>;
   webview: RPCSchema<{ requests: Record<never, never>; messages: Record<never, never> }>;
+}
+
+export type DesktopUpdateStatus = 'idle' | 'checking' | 'downloading' | 'ready' | 'current' | 'error';
+
+export interface DesktopUpdateState {
+  status: DesktopUpdateStatus;
+  /** The version this app runs. */
+  version: string;
+  /** The downloaded version waiting for a restart. */
+  available?: string;
 }

@@ -6,7 +6,9 @@ import { makeAuthService } from '../services/auth/auth.service';
 import { makeAvatarService } from '../services/avatar/avatar.service';
 import { makeBotService } from '../services/bot/bot.service';
 import { makeCollaborationService } from '../services/collaboration/collaboration.service';
+import { makeComputerService } from '../services/computer/computer.service';
 import { makeConversationService } from '../services/conversation/conversation.service';
+import { makeGifService } from '../services/gif/gif.service';
 import { makeInstructionService } from '../services/instruction/instruction.service';
 import { makeLimitService } from '../services/limit/limit.service';
 import { makeLinkService } from '../services/link/link.service';
@@ -48,11 +50,13 @@ export async function makeServices({
   });
 
   const collaboration = makeCollaborationService({ database });
+  const gifs = makeGifService({ settings });
 
   const runtime = makeRuntimeService({
     ...runtimeOptions,
     permissions: tools,
     collaboration,
+    gifs,
   });
 
   try {
@@ -99,10 +103,12 @@ export async function makeServices({
 
     await bots.actions.restore();
     runtime.resume();
+    await runtime.actions.sweepComputers();
 
     return {
       routines: makeRoutineService({ bots, runtime }),
       todos: makeTodoService({ bots, runtime }),
+      computers: makeComputerService({ bots, runtime }),
       activity: makeActivityService({ bots, runtime }),
       artifacts: makeArtifactService({ bots, runtime }),
       notifications,
@@ -129,6 +135,7 @@ export async function makeServices({
       bots,
       runtime,
       tools,
+      gif: gifs,
       skills: skill,
       instructions: instruction,
       plugins: plugin,
@@ -145,6 +152,7 @@ export async function makeServices({
         skill,
         attachments,
         tools,
+        gifs,
       }),
     };
   } catch (error) {
