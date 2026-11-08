@@ -268,6 +268,8 @@ export const contract = {
 
     shared: ocFind.input(skillDiscover).output(skillCatalog),
 
+    local: ocFind.input(skillDiscover).output(skillCatalog),
+
     settings: ocAuth.output(skillSettings),
 
     configure: ocAuth.input(skillConfigure).output(skillSettings),

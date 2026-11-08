@@ -2,7 +2,7 @@ import { BACKGROUND_CONTEXT } from '@earendil-works/chord/context';
 import { createToolSearchExtension } from '@earendil-works/pi-durable/tool-search';
 import { log } from '@repo/logger/server';
 import { match, P } from 'ts-pattern';
-import { artifactBlocksCatalog } from '../artifact/artifact-blocks.utils';
+import { ARTIFACT_BLOCKS_CATALOG } from '../artifact/artifact.constants';
 import { makeCollaborationExtensionService } from '../collaboration/collaboration-extension.service';
 import { makeComputerExtensionService } from '../computer/computer-extension.service';
 import { makeNoteExtensionService } from '../note/note-extension.service';
@@ -245,7 +245,7 @@ export function makeRuntimeService({
     queries: {
       computerStatus: runtimeBotCall(directory, runtimeQueryComputerStatus),
       computerEndpoint: runtimeBotCall(directory, runtimeQueryComputerEndpoint),
-      artifactBlocks: () => artifactBlocksCatalog,
+      artifactBlocks: () => ARTIFACT_BLOCKS_CATALOG,
       artifactVersions: runtimeBotCall(directory, runtimeQueryArtifactVersions),
       artifact: runtimeBotCall(directory, runtimeQueryArtifact),
       artifacts: runtimeBotCall(directory, runtimeQueryListArtifacts),

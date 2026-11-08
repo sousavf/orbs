@@ -7,6 +7,10 @@ import { modelSelection, modelThinkingLevel } from './model.types';
 import { pluginCatalog } from './plugin.types';
 import { skill } from './skill.types';
 
+export const BOT_FIELDS = {
+  maxInstructions: 64_000,
+} as const;
+
 export const botAvatarImage = z.object({ kind: z.literal('image'), src: z.string().regex(/^\/avatars\/[\da-f-]{36}\.webp$/) });
 
 export const botAvatar = z.discriminatedUnion('kind', [
@@ -32,13 +36,14 @@ export const botFields = z.object({
   avatar: botAvatar.nullable(),
   name: z.string().trim().min(1).max(64),
   handle: z.string().trim().toLowerCase().min(1).max(48).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, { error: 'validation_handle' }),
-  instructions: z.string().max(16000),
+  instructions: z.string().max(BOT_FIELDS.maxInstructions),
   ...modelSelection.shape,
   fallbackModel: modelSelection.nullable(),
   permission: z.enum(['read-only', 'ask', 'auto', 'full']),
   inherit: botInherit,
   sharedSkills: z.array(z.string().trim().min(1).max(128)).max(500).nullable(),
   sharedMcp: z.array(z.string().trim().min(1).max(128)).max(200).nullable(),
+  disabledSkills: z.array(z.string().trim().min(1).max(128)).max(500).nullable(),
 });
 
 export const bot = botFields.extend({
@@ -59,6 +64,7 @@ export const botCreate = botFields.extend({
   inherit: botInherit.default(['skills', 'mcp', 'plugins']),
   sharedSkills: botFields.shape.sharedSkills.default(null),
   sharedMcp: botFields.shape.sharedMcp.default(null),
+  disabledSkills: botFields.shape.disabledSkills.default(null),
 });
 
 export const botUpdate = botFields.partial().extend(botGet.shape);

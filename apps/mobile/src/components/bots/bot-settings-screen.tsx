@@ -1,7 +1,7 @@
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema';
 import { botAvatarEmoji } from '@repo/client/client';
 import { useBotUpdate } from '@repo/client/react';
-import { botAvatar, botForm } from '@repo/contracts/universal';
+import { BOT_FIELDS, botAvatar, botForm } from '@repo/contracts/universal';
 import { m } from '@repo/i18n/client';
 import { useQuery } from '@tanstack/react-query';
 import { Stack, useLocalSearchParams, usePreventRemove, useRouter } from 'expo-router';
@@ -97,6 +97,7 @@ function BotSettingsScreenForm({ session, bot, isDeletable }: BotSettingsScreenF
       inherit: bot.inherit,
       sharedSkills: bot.sharedSkills,
       sharedMcp: bot.sharedMcp,
+      disabledSkills: bot.disabledSkills,
     },
   });
 
@@ -134,7 +135,7 @@ function BotSettingsScreenForm({ session, bot, isDeletable }: BotSettingsScreenF
   const isBusy = save.isPending;
   const prefill = (text: string) => returnToChat({ botId: bot.id, prefill: text });
 
-  const submit = form.handleSubmit(({ sharedSkills: _skills, sharedMcp: _mcp, ...input }: BotForm) => save.mutate({
+  const submit = form.handleSubmit(({ sharedSkills: _skills, sharedMcp: _mcp, disabledSkills: _disabled, ...input }: BotForm) => save.mutate({
     ...input,
     inherit: [
       ...input.inherit.filter((resource) => !BOT_SHARED_RESOURCES.includes(resource)),
@@ -183,7 +184,7 @@ function BotSettingsScreenForm({ session, bot, isDeletable }: BotSettingsScreenF
                 control={form.control}
                 editable={!isBusy}
                 label={m.rooms_bot_instructions()}
-                maxLength={16000}
+                maxLength={BOT_FIELDS.maxInstructions}
                 name="instructions"
                 placeholder={m.rooms_bot_instructions_placeholder()}
               />

@@ -31,6 +31,12 @@ export interface BotSkillNameParams {
   name: string;
 }
 
+export interface BotDisabledSkillsParams {
+  disabled: string[] | null;
+  name: string;
+  isOn: boolean;
+}
+
 export interface BotModelBrandParams {
   providerId: string;
   modelId: string;
@@ -95,9 +101,21 @@ export interface BotCreateParams {
   onCreated: (bot: UniversalTypes.Bot) => void;
 }
 
+export interface BotMcpRemoveParams {
+  onDone: () => void;
+}
+
 export interface BotMcpParams {
-  botId: string;
+  bot: UniversalTypes.Bot;
   login: () => BotMcpLogin;
+}
+
+export interface BotMcpRow {
+  name: string;
+  server: UniversalTypes.McpCatalog['servers'][number] | null;
+  isShared: boolean;
+  isOn: boolean;
+  needsLogin: boolean;
 }
 
 export interface BotMcpLogin {
