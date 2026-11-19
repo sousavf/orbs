@@ -32,5 +32,5 @@ export default {
   scripts: { postBuild: '../../scripts/desktop.ts' },
   // Read back at runtime through BuildConfig, so packaged builds keep the name and identifier.
   runtime: { exitOnLastWindowClosed: false, name, identifier },
-  release: { baseUrl: 'https://github.com/nikuscs/orbs/releases/latest/download', generatePatch: false },
+  release: { baseUrl: 'https://github.com/sousavf/orbs/releases/latest/download', generatePatch: false },
 } satisfies ElectrobunConfig;

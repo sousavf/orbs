@@ -4,9 +4,22 @@
 
 Orbs runs a small daemon on your computer. Each bot is a persistent [Pi](https://github.com/earendil-works/pi) agent with its own conversation, tools, skills and memory, and it keeps working when you close the app. Your devices pair with the daemon once, then talk to it over your local network or Tailscale. There are no accounts and no cloud service in between.
 
+> [!NOTE]
+> This is a fork of [nikuscs/orbs](https://github.com/nikuscs/orbs) that has diverged from the original and is developed independently. Changes here are not sent upstream, and upstream changes are merged only when they fit. For the original project and its releases, use the upstream repository.
+
+## What is different in this fork
+
+- **Chat first.** Bots answer like a person in a chat: the answer in the first sentence, usually one or two sentences, no report-style recaps.
+- **Bubbles stay open.** Long messages are shown in full; there is no "Read more".
+- **No technical noise by default.** While a bot works you see typing dots and a short label, not tool names, file names or a seconds counter. Turn off **Hide tool calls and thinking** in Settings to see the details.
+- **Message times.** Every message shows its time, with a divider for each day.
+- **Status dots.** A green dot marks a bot that is working, a red one a bot waiting for you.
+- **Avatar generation.** Describe an avatar and have it painted by a local Automatic1111-compatible server (such as Draw Things) or any OpenAI-compatible images API. Configure it in **Settings → General**.
+- **Claude subscription.** Bots can run on a Claude subscription through the Claude Code provider.
+
 ## ⬇️ Download
 
-**[Download the latest macOS app](https://github.com/nikuscs/orbs/releases/latest)** (Apple silicon). Unzip it, move **Orbs** to Applications and open it. Choose **This Mac**, then connect a model provider such as Anthropic or OpenAI. The app runs the daemon for you and lives in the menu bar.
+This fork does not publish builds yet. Run it from source as described under [Run it locally](#-run-it-locally). The [upstream releases](https://github.com/nikuscs/orbs/releases/latest) are builds of the original project and do not include the changes above.
 
 ## ✨ Features
 
@@ -34,7 +47,7 @@ Orbs runs a small daemon on your computer. Each bot is a persistent [Pi](https:/
 **1. Install**
 
 ```bash
-git clone https://github.com/nikuscs/orbs && cd orbs
+git clone https://github.com/sousavf/orbs && cd orbs
 bun install
 cp .env.example .env
 ```
@@ -123,4 +136,4 @@ Agent guidance lives in `AGENTS.md` and `.agents/`. Run `bun run agents:sync` af
 
 ## 📄 License
 
-MIT. The avatar blob engine in `packages/avatar-blobs/` is by Jérémy Perret, also MIT; see `packages/avatar-blobs/LICENSE`.
+MIT. Orbs is by nikuscs; the changes in this fork are by Vasco Sousa, under the same license. The avatar blob engine in `packages/avatar-blobs/` is by Jérémy Perret, also MIT; see `packages/avatar-blobs/LICENSE`.
