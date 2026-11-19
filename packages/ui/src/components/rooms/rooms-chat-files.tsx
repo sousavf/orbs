@@ -1,4 +1,4 @@
-import { roomsFileRows, roomsImageFrame } from '@repo/client/client';
+import { CHAT, roomsFileIsMarkdown, roomsFileRows, roomsImageFrame } from '@repo/client/client';
 import { useChatAttachmentUrl } from '@repo/client/web';
 import { m } from '@repo/i18n/client';
 import { useInView } from 'motion/react';
@@ -106,17 +106,34 @@ function RoomsChatGallery({ botId, files, hidden, onOpen }: RoomsChatGalleryProp
   );
 }
 
-function RoomsChatFile({ botId, file }: { botId: string, file: RoomsFilePart }) {
-  const url = useChatAttachmentUrl(botId, file.url);
+interface RoomsChatFileProps {
+  botId: string
+  file: RoomsFilePart
+  onOpen?: (file: RoomsFilePart) => void
+}
 
-  return (
-    <a
-      className={cn(messageSurface, 'flex h-8 max-w-full items-center gap-1.5 rounded-full px-3 text-sm outline-none focus-visible:ring-2 focus-visible:ring-ring')}
-      download={file.filename}
-      href={url}
-    >
+function RoomsChatFile({ botId, file, onOpen }: RoomsChatFileProps) {
+  const url = useChatAttachmentUrl(botId, file.url);
+  const pill = cn(messageSurface, 'flex h-8 max-w-full items-center gap-1.5 rounded-full px-3 text-sm outline-none focus-visible:ring-2 focus-visible:ring-ring');
+
+  const label = (
+    <>
       <IconLucideFileText className="size-4 shrink-0 text-muted-foreground" />
       <span className="max-w-56 truncate">{file.filename}</span>
+    </>
+  );
+
+  if (onOpen && roomsFileIsMarkdown(file) && file.url.startsWith(CHAT.attachmentScheme)) {
+    return (
+      <button aria-label={m.rooms_media_open({ name: file.filename ?? '' })} className={cn(pill, 'cursor-pointer')} type="button" onClick={() => onOpen(file)}>
+        {label}
+      </button>
+    );
+  }
+
+  return (
+    <a className={pill} download={file.filename} href={url}>
+      {label}
     </a>
   );
 }
@@ -134,7 +151,7 @@ export function RoomsChatFiles({ botId, files, onOpen }: RoomsChatFilesProps) {
         .with({ kind: 'images' }, (images) => <RoomsChatGallery botId={botId} files={images.files} hidden={images.hidden} key={row.key} onOpen={onOpen} />)
         .with({ kind: 'video' }, ({ file }) => <RoomsChatVideo botId={botId} fallback={<RoomsChatFile botId={botId} file={file} />} file={file} key={row.key} />)
         .with({ kind: 'audio' }, ({ file }) => <RoomsChatAudio botId={botId} file={file} key={row.key} />)
-        .with({ kind: 'file' }, ({ file }) => <RoomsChatFile botId={botId} file={file} key={row.key} />)
+        .with({ kind: 'file' }, ({ file }) => <RoomsChatFile botId={botId} file={file} key={row.key} onOpen={onOpen} />)
         .exhaustive())}
     </div>
   );
