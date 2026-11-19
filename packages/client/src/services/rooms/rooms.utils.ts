@@ -1,4 +1,4 @@
-import { m } from '@repo/i18n/client';
+import { getLocale, m } from '@repo/i18n/client';
 import { match, P } from 'ts-pattern';
 import { CHAT } from '../chat/chat.constants';
 import { toolInputText } from '../tool/tool.utils';
@@ -197,6 +197,29 @@ export function roomsImageFrame(size?: { width: number, height: number }) {
 
 export function roomsFileImages(message: ChatMessage | undefined): RoomsTypes.RoomsFilePart[] {
   return (message?.parts ?? []).flatMap((part) => (part.type === 'file' && roomsFileKind(part.mediaType) === 'images' ? [part] : []));
+}
+
+export function roomsFileIsMarkdown(file: Pick<RoomsTypes.RoomsFilePart, 'mediaType' | 'filename'>): boolean {
+  const mediaType = file.mediaType.split(';', 1)[0].trim().toLowerCase();
+  const filename = (file.filename ?? '').toLowerCase();
+
+  return ROOMS.markdownMediaTypes.some((type) => type === mediaType) || ROOMS.markdownExtensions.some((extension) => filename.endsWith(extension));
+}
+
+export function roomsMessageCaption(metadata: ChatMessage['metadata']): string | undefined {
+  if (!metadata) {
+    return undefined;
+  }
+
+  const locale = getLocale();
+
+  const day = roomsDayLabel({
+    createdAt: metadata.createdAt,
+    now: new Date(),
+    locale,
+  });
+
+  return day ? m.rooms_media_viewer_from({ name: metadata.authorName, time: `${day} ${roomsMessageTime({ createdAt: metadata.createdAt, locale })}` }) : undefined;
 }
 
 export function roomsMediaTime(seconds: number): string {

@@ -16,6 +16,8 @@ export const CHAT = {
   posterPath: 'poster',
   videoFirstFrame: '#t=0.001',
   attachmentUrlKey: 'objectUrl',
+  attachmentTextKey: 'text',
+  documentMaxBytes: 2 * 1024 * 1024,
   entryPrefix: 'entry-',
   liveMessageId: 'live',
   outgoingPrefix: 'outgoing-',

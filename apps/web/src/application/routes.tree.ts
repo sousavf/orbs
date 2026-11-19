@@ -38,6 +38,7 @@ import { Route as botsBotsDotbotIdDotskillsDotlocalRouteImport } from "./../rout
 import { Route as roomsRoomsDotdirectDothandleDotactivityRouteImport } from "./../routes/rooms/rooms.direct.$handle.activity";
 import { Route as roomsRoomsDotdirectDothandleDotcomputerRouteImport } from "./../routes/rooms/rooms.direct.$handle.computer";
 import { Route as roomsRoomsDotdirectDothandleDotcomputerShutdownRouteImport } from "./../routes/rooms/rooms.direct.$handle.computer-shutdown";
+import { Route as roomsRoomsDotdirectDothandleDotfilesRouteImport } from "./../routes/rooms/rooms.direct.$handle.files";
 import { Route as roomsRoomsDotdirectDothandleDotmediaRouteImport } from "./../routes/rooms/rooms.direct.$handle.media";
 import { Route as roomsRoomsDotdirectDothandleDotresetRouteImport } from "./../routes/rooms/rooms.direct.$handle.reset";
 import { Route as roomsRoomsDotdirectDothandleDotroutinesRouteImport } from "./../routes/rooms/rooms.direct.$handle.routines";
@@ -50,6 +51,7 @@ import { Route as botsBotsDotbotIdDotroutinesDotroutineIdDoteditRouteImport } fr
 import { Route as botsBotsDotbotIdDottodosDottodoIdDotdeleteRouteImport } from "./../routes/bots/bots.$botId.todos.$todoId.delete";
 import { Route as roomsRoomsDotdirectDothandleDotactivityDotrunIdRouteImport } from "./../routes/rooms/rooms.direct.$handle.activity.$runId";
 import { Route as roomsRoomsDotdirectDothandleDotcomputerDotshutdownRouteImport } from "./../routes/rooms/rooms.direct.$handle.computer.shutdown";
+import { Route as roomsRoomsDotdirectDothandleDotfilesDotattachmentIdRouteImport } from "./../routes/rooms/rooms.direct.$handle.files.$attachmentId";
 import { Route as roomsRoomsDotdirectDothandleDotmediaDotattachmentIdRouteImport } from "./../routes/rooms/rooms.direct.$handle.media.$attachmentId";
 import { Route as roomsRoomsDotdirectDothandleDottodosDottodoIdDotdeleteRouteImport } from "./../routes/rooms/rooms.direct.$handle.todos.$todoId.delete";
 import { Route as roomsRoomsDotdirectDothandleDotwithDotpeerRouteImport } from "./../routes/rooms/rooms.direct.$handle.with.$peer";
@@ -213,6 +215,12 @@ const roomsRoomsDotdirectDothandleDotcomputerShutdownRoute =
     path: "/computer-shutdown",
     getParentRoute: () => roomsRoomsDotdirectDothandleRoute,
   } as any);
+const roomsRoomsDotdirectDothandleDotfilesRoute =
+  roomsRoomsDotdirectDothandleDotfilesRouteImport.update({
+    id: "/files",
+    path: "/files",
+    getParentRoute: () => roomsRoomsDotdirectDothandleRoute,
+  } as any);
 const roomsRoomsDotdirectDothandleDotmediaRoute =
   roomsRoomsDotdirectDothandleDotmediaRouteImport.update({
     id: "/media",
@@ -285,6 +293,12 @@ const roomsRoomsDotdirectDothandleDotcomputerDotshutdownRoute =
     path: "/shutdown",
     getParentRoute: () => roomsRoomsDotdirectDothandleDotcomputerRoute,
   } as any);
+const roomsRoomsDotdirectDothandleDotfilesDotattachmentIdRoute =
+  roomsRoomsDotdirectDothandleDotfilesDotattachmentIdRouteImport.update({
+    id: "/$attachmentId",
+    path: "/$attachmentId",
+    getParentRoute: () => roomsRoomsDotdirectDothandleDotfilesRoute,
+  } as any);
 const roomsRoomsDotdirectDothandleDotmediaDotattachmentIdRoute =
   roomsRoomsDotdirectDothandleDotmediaDotattachmentIdRouteImport.update({
     id: "/$attachmentId",
@@ -333,6 +347,7 @@ export interface FileRoutesByFullPath {
   "/rooms/direct/$handle/activity": typeof roomsRoomsDotdirectDothandleDotactivityRouteWithChildren;
   "/rooms/direct/$handle/computer": typeof roomsRoomsDotdirectDothandleDotcomputerRouteWithChildren;
   "/rooms/direct/$handle/computer-shutdown": typeof roomsRoomsDotdirectDothandleDotcomputerShutdownRoute;
+  "/rooms/direct/$handle/files": typeof roomsRoomsDotdirectDothandleDotfilesRouteWithChildren;
   "/rooms/direct/$handle/media": typeof roomsRoomsDotdirectDothandleDotmediaRouteWithChildren;
   "/rooms/direct/$handle/reset": typeof roomsRoomsDotdirectDothandleDotresetRoute;
   "/rooms/direct/$handle/routines": typeof roomsRoomsDotdirectDothandleDotroutinesRoute;
@@ -345,6 +360,7 @@ export interface FileRoutesByFullPath {
   "/bots/$botId/todos/$todoId/delete": typeof botsBotsDotbotIdDottodosDottodoIdDotdeleteRoute;
   "/rooms/direct/$handle/activity/$runId": typeof roomsRoomsDotdirectDothandleDotactivityDotrunIdRoute;
   "/rooms/direct/$handle/computer/shutdown": typeof roomsRoomsDotdirectDothandleDotcomputerDotshutdownRoute;
+  "/rooms/direct/$handle/files/$attachmentId": typeof roomsRoomsDotdirectDothandleDotfilesDotattachmentIdRoute;
   "/rooms/direct/$handle/media/$attachmentId": typeof roomsRoomsDotdirectDothandleDotmediaDotattachmentIdRoute;
   "/rooms/direct/$handle/todos/$todoId/delete": typeof roomsRoomsDotdirectDothandleDottodosDottodoIdDotdeleteRoute;
   "/rooms/direct/$handle/with/$peer/$conversationId": typeof roomsRoomsDotdirectDothandleDotwithDotpeerRoute;
@@ -374,6 +390,7 @@ export interface FileRoutesByTo {
   "/rooms/direct/$handle/activity": typeof roomsRoomsDotdirectDothandleDotactivityRouteWithChildren;
   "/rooms/direct/$handle/computer": typeof roomsRoomsDotdirectDothandleDotcomputerRouteWithChildren;
   "/rooms/direct/$handle/computer-shutdown": typeof roomsRoomsDotdirectDothandleDotcomputerShutdownRoute;
+  "/rooms/direct/$handle/files": typeof roomsRoomsDotdirectDothandleDotfilesRouteWithChildren;
   "/rooms/direct/$handle/media": typeof roomsRoomsDotdirectDothandleDotmediaRouteWithChildren;
   "/rooms/direct/$handle/reset": typeof roomsRoomsDotdirectDothandleDotresetRoute;
   "/rooms/direct/$handle/routines": typeof roomsRoomsDotdirectDothandleDotroutinesRoute;
@@ -386,6 +403,7 @@ export interface FileRoutesByTo {
   "/bots/$botId/todos/$todoId/delete": typeof botsBotsDotbotIdDottodosDottodoIdDotdeleteRoute;
   "/rooms/direct/$handle/activity/$runId": typeof roomsRoomsDotdirectDothandleDotactivityDotrunIdRoute;
   "/rooms/direct/$handle/computer/shutdown": typeof roomsRoomsDotdirectDothandleDotcomputerDotshutdownRoute;
+  "/rooms/direct/$handle/files/$attachmentId": typeof roomsRoomsDotdirectDothandleDotfilesDotattachmentIdRoute;
   "/rooms/direct/$handle/media/$attachmentId": typeof roomsRoomsDotdirectDothandleDotmediaDotattachmentIdRoute;
   "/rooms/direct/$handle/todos/$todoId/delete": typeof roomsRoomsDotdirectDothandleDottodosDottodoIdDotdeleteRoute;
   "/rooms/direct/$handle/with/$peer/$conversationId": typeof roomsRoomsDotdirectDothandleDotwithDotpeerRoute;
@@ -421,6 +439,7 @@ export interface FileRoutesById {
   "/_chat/rooms/direct/$handle/activity": typeof roomsRoomsDotdirectDothandleDotactivityRouteWithChildren;
   "/_chat/rooms/direct/$handle/computer": typeof roomsRoomsDotdirectDothandleDotcomputerRouteWithChildren;
   "/_chat/rooms/direct/$handle/computer-shutdown": typeof roomsRoomsDotdirectDothandleDotcomputerShutdownRoute;
+  "/_chat/rooms/direct/$handle/files": typeof roomsRoomsDotdirectDothandleDotfilesRouteWithChildren;
   "/_chat/rooms/direct/$handle/media": typeof roomsRoomsDotdirectDothandleDotmediaRouteWithChildren;
   "/_chat/rooms/direct/$handle/reset": typeof roomsRoomsDotdirectDothandleDotresetRoute;
   "/_chat/rooms/direct/$handle/routines": typeof roomsRoomsDotdirectDothandleDotroutinesRoute;
@@ -433,6 +452,7 @@ export interface FileRoutesById {
   "/_chat/bots/$botId/todos/$todoId/delete": typeof botsBotsDotbotIdDottodosDottodoIdDotdeleteRoute;
   "/_chat/rooms/direct/$handle/activity/$runId": typeof roomsRoomsDotdirectDothandleDotactivityDotrunIdRoute;
   "/_chat/rooms/direct/$handle/computer/shutdown": typeof roomsRoomsDotdirectDothandleDotcomputerDotshutdownRoute;
+  "/_chat/rooms/direct/$handle/files/$attachmentId": typeof roomsRoomsDotdirectDothandleDotfilesDotattachmentIdRoute;
   "/_chat/rooms/direct/$handle/media/$attachmentId": typeof roomsRoomsDotdirectDothandleDotmediaDotattachmentIdRoute;
   "/_chat/rooms/direct/$handle/todos/$todoId/delete": typeof roomsRoomsDotdirectDothandleDottodosDottodoIdDotdeleteRoute;
   "/_chat/rooms/direct/$handle/with/$peer/$conversationId": typeof roomsRoomsDotdirectDothandleDotwithDotpeerRoute;
@@ -468,6 +488,7 @@ export interface FileRouteTypes {
     | "/rooms/direct/$handle/activity"
     | "/rooms/direct/$handle/computer"
     | "/rooms/direct/$handle/computer-shutdown"
+    | "/rooms/direct/$handle/files"
     | "/rooms/direct/$handle/media"
     | "/rooms/direct/$handle/reset"
     | "/rooms/direct/$handle/routines"
@@ -480,6 +501,7 @@ export interface FileRouteTypes {
     | "/bots/$botId/todos/$todoId/delete"
     | "/rooms/direct/$handle/activity/$runId"
     | "/rooms/direct/$handle/computer/shutdown"
+    | "/rooms/direct/$handle/files/$attachmentId"
     | "/rooms/direct/$handle/media/$attachmentId"
     | "/rooms/direct/$handle/todos/$todoId/delete"
     | "/rooms/direct/$handle/with/$peer/$conversationId";
@@ -509,6 +531,7 @@ export interface FileRouteTypes {
     | "/rooms/direct/$handle/activity"
     | "/rooms/direct/$handle/computer"
     | "/rooms/direct/$handle/computer-shutdown"
+    | "/rooms/direct/$handle/files"
     | "/rooms/direct/$handle/media"
     | "/rooms/direct/$handle/reset"
     | "/rooms/direct/$handle/routines"
@@ -521,6 +544,7 @@ export interface FileRouteTypes {
     | "/bots/$botId/todos/$todoId/delete"
     | "/rooms/direct/$handle/activity/$runId"
     | "/rooms/direct/$handle/computer/shutdown"
+    | "/rooms/direct/$handle/files/$attachmentId"
     | "/rooms/direct/$handle/media/$attachmentId"
     | "/rooms/direct/$handle/todos/$todoId/delete"
     | "/rooms/direct/$handle/with/$peer/$conversationId";
@@ -555,6 +579,7 @@ export interface FileRouteTypes {
     | "/_chat/rooms/direct/$handle/activity"
     | "/_chat/rooms/direct/$handle/computer"
     | "/_chat/rooms/direct/$handle/computer-shutdown"
+    | "/_chat/rooms/direct/$handle/files"
     | "/_chat/rooms/direct/$handle/media"
     | "/_chat/rooms/direct/$handle/reset"
     | "/_chat/rooms/direct/$handle/routines"
@@ -567,6 +592,7 @@ export interface FileRouteTypes {
     | "/_chat/bots/$botId/todos/$todoId/delete"
     | "/_chat/rooms/direct/$handle/activity/$runId"
     | "/_chat/rooms/direct/$handle/computer/shutdown"
+    | "/_chat/rooms/direct/$handle/files/$attachmentId"
     | "/_chat/rooms/direct/$handle/media/$attachmentId"
     | "/_chat/rooms/direct/$handle/todos/$todoId/delete"
     | "/_chat/rooms/direct/$handle/with/$peer/$conversationId";
@@ -786,6 +812,13 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof roomsRoomsDotdirectDothandleDotcomputerShutdownRouteImport;
       parentRoute: typeof roomsRoomsDotdirectDothandleRoute;
     };
+    "/_chat/rooms/direct/$handle/files": {
+      id: "/_chat/rooms/direct/$handle/files";
+      path: "/files";
+      fullPath: "/rooms/direct/$handle/files";
+      preLoaderRoute: typeof roomsRoomsDotdirectDothandleDotfilesRouteImport;
+      parentRoute: typeof roomsRoomsDotdirectDothandleRoute;
+    };
     "/_chat/rooms/direct/$handle/media": {
       id: "/_chat/rooms/direct/$handle/media";
       path: "/media";
@@ -869,6 +902,13 @@ declare module "@tanstack/react-router" {
       fullPath: "/rooms/direct/$handle/computer/shutdown";
       preLoaderRoute: typeof roomsRoomsDotdirectDothandleDotcomputerDotshutdownRouteImport;
       parentRoute: typeof roomsRoomsDotdirectDothandleDotcomputerRoute;
+    };
+    "/_chat/rooms/direct/$handle/files/$attachmentId": {
+      id: "/_chat/rooms/direct/$handle/files/$attachmentId";
+      path: "/$attachmentId";
+      fullPath: "/rooms/direct/$handle/files/$attachmentId";
+      preLoaderRoute: typeof roomsRoomsDotdirectDothandleDotfilesDotattachmentIdRouteImport;
+      parentRoute: typeof roomsRoomsDotdirectDothandleDotfilesRoute;
     };
     "/_chat/rooms/direct/$handle/media/$attachmentId": {
       id: "/_chat/rooms/direct/$handle/media/$attachmentId";
@@ -1011,6 +1051,21 @@ const roomsRoomsDotdirectDothandleDotcomputerRouteWithChildren =
     roomsRoomsDotdirectDothandleDotcomputerRouteChildren,
   );
 
+interface roomsRoomsDotdirectDothandleDotfilesRouteChildren {
+  roomsRoomsDotdirectDothandleDotfilesDotattachmentIdRoute: typeof roomsRoomsDotdirectDothandleDotfilesDotattachmentIdRoute;
+}
+
+const roomsRoomsDotdirectDothandleDotfilesRouteChildren: roomsRoomsDotdirectDothandleDotfilesRouteChildren =
+  {
+    roomsRoomsDotdirectDothandleDotfilesDotattachmentIdRoute:
+      roomsRoomsDotdirectDothandleDotfilesDotattachmentIdRoute,
+  };
+
+const roomsRoomsDotdirectDothandleDotfilesRouteWithChildren =
+  roomsRoomsDotdirectDothandleDotfilesRoute._addFileChildren(
+    roomsRoomsDotdirectDothandleDotfilesRouteChildren,
+  );
+
 interface roomsRoomsDotdirectDothandleDotmediaRouteChildren {
   roomsRoomsDotdirectDothandleDotmediaDotattachmentIdRoute: typeof roomsRoomsDotdirectDothandleDotmediaDotattachmentIdRoute;
 }
@@ -1045,6 +1100,7 @@ interface roomsRoomsDotdirectDothandleRouteChildren {
   roomsRoomsDotdirectDothandleDotactivityRoute: typeof roomsRoomsDotdirectDothandleDotactivityRouteWithChildren;
   roomsRoomsDotdirectDothandleDotcomputerRoute: typeof roomsRoomsDotdirectDothandleDotcomputerRouteWithChildren;
   roomsRoomsDotdirectDothandleDotcomputerShutdownRoute: typeof roomsRoomsDotdirectDothandleDotcomputerShutdownRoute;
+  roomsRoomsDotdirectDothandleDotfilesRoute: typeof roomsRoomsDotdirectDothandleDotfilesRouteWithChildren;
   roomsRoomsDotdirectDothandleDotmediaRoute: typeof roomsRoomsDotdirectDothandleDotmediaRouteWithChildren;
   roomsRoomsDotdirectDothandleDotresetRoute: typeof roomsRoomsDotdirectDothandleDotresetRoute;
   roomsRoomsDotdirectDothandleDotroutinesRoute: typeof roomsRoomsDotdirectDothandleDotroutinesRoute;
@@ -1060,6 +1116,8 @@ const roomsRoomsDotdirectDothandleRouteChildren: roomsRoomsDotdirectDothandleRou
       roomsRoomsDotdirectDothandleDotcomputerRouteWithChildren,
     roomsRoomsDotdirectDothandleDotcomputerShutdownRoute:
       roomsRoomsDotdirectDothandleDotcomputerShutdownRoute,
+    roomsRoomsDotdirectDothandleDotfilesRoute:
+      roomsRoomsDotdirectDothandleDotfilesRouteWithChildren,
     roomsRoomsDotdirectDothandleDotmediaRoute:
       roomsRoomsDotdirectDothandleDotmediaRouteWithChildren,
     roomsRoomsDotdirectDothandleDotresetRoute:

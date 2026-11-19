@@ -18,6 +18,7 @@ export * from './hooks/use-chat-arrange';
 export * from './hooks/use-chat-context-usage';
 export * from './hooks/use-chat-section-move';
 export * from './hooks/use-chat-defaults';
+export * from './hooks/use-chat-document';
 export * from './hooks/use-chat-hide-verbose';
 export * from './hooks/use-notification-presence';
 export * from './hooks/use-notification-settings';

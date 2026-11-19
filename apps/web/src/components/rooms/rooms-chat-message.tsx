@@ -1,4 +1,4 @@
-import { CHAT, chatActivitySteps, chatActivityStepsLabel, toolBlocks } from '@repo/client/client';
+import { CHAT, chatActivitySteps, chatActivityStepsLabel, roomsFileIsMarkdown, toolBlocks } from '@repo/client/client';
 import { useChatHideVerbose } from '@repo/client/react';
 import { useLongPress } from '@repo/client/web';
 import { m } from '@repo/i18n/client';
@@ -22,7 +22,7 @@ import { RoomsChatEvents } from '@/components/rooms/rooms-chat-events';
 import { RoomsChatGif } from '@/components/rooms/rooms-chat-gif';
 import { RoomsChatMention } from '@/components/rooms/rooms-chat-mention';
 import { RoomsChatSubagent } from '@/components/rooms/rooms-chat-subagent';
-import type { ChatMessage, ToolBot } from '@repo/client/client';
+import type { ChatMessage, RoomsFilePart, ToolBot } from '@repo/client/client';
 import type * as ReactTypes from 'react';
 
 const mentionComponents = { mention: RoomsChatMention };
@@ -108,20 +108,38 @@ export function RoomsChatMessage({
     </div>
   );
 
+  const openFile = ({ handle: chat, entryId: entry, file }: { handle: string, entryId: number, file: RoomsFilePart }) => {
+    if (!file.url.startsWith(CHAT.attachmentScheme)) {
+      return;
+    }
+
+    const params = { handle: chat, attachmentId: file.url.slice(CHAT.attachmentScheme.length) };
+    const search = { entryId: entry };
+
+    void match(roomsFileIsMarkdown(file))
+      .with(true, () => navigate({
+        to: '/rooms/direct/$handle/files/$attachmentId',
+        params,
+        search,
+        resetScroll: false,
+      }))
+      .otherwise(() => navigate({
+        to: '/rooms/direct/$handle/media/$attachmentId',
+        params,
+        search,
+        resetScroll: false,
+      }));
+  };
+
   const filesView = files.length > 0 ? (
     <RoomsChatFiles
       botId={botId}
       files={files}
-      onOpen={handle && entryId ? (file) => {
-        if (file.url.startsWith(CHAT.attachmentScheme)) {
-          void navigate({
-            to: '/rooms/direct/$handle/media/$attachmentId',
-            params: { handle, attachmentId: file.url.slice(CHAT.attachmentScheme.length) },
-            search: { entryId },
-            resetScroll: false,
-          });
-        }
-      } : undefined}
+      onOpen={handle && entryId ? (file) => openFile({
+        handle,
+        entryId,
+        file,
+      }) : undefined}
     />
   ) : null;
 

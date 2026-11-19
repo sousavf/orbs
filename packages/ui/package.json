@@ -113,6 +113,7 @@
     "./rooms/rooms-chat-activity": "./src/components/rooms/rooms-chat-activity.tsx",
     "./rooms/rooms-chat-approval": "./src/components/rooms/rooms-chat-approval.tsx",
     "./rooms/rooms-chat-attachments": "./src/components/rooms/rooms-chat-attachments.tsx",
+    "./rooms/rooms-chat-document": "./src/components/rooms/rooms-chat-document.tsx",
     "./rooms/rooms-chat-emoji-choices": "./src/components/rooms/rooms-chat-emoji-choices.tsx",
     "./rooms/rooms-chat-emoji-loading": "./src/components/rooms/rooms-chat-emoji-loading.tsx",
     "./rooms/rooms-chat-emoji-picker": "./src/components/rooms/rooms-chat-emoji-picker.tsx",

@@ -95,6 +95,19 @@ export const chatQueries = {
       staleTime: Number.POSITIVE_INFINITY,
     });
   },
+
+  attachmentText({ client, rpc }: RpcContextValue, input: ChatAttachmentUrlParams) {
+    return queryOptions({
+      queryKey: [...rpc.attachments.download.queryKey({ input }), CHAT.attachmentTextKey],
+      queryFn: async ({ signal }) => {
+        const file = await client.attachments.download(input, { signal });
+        const isTooLarge = file.size > CHAT.documentMaxBytes;
+
+        return { name: file.name, isTooLarge, text: isTooLarge ? '' : await file.text() };
+      },
+      staleTime: Number.POSITIVE_INFINITY,
+    });
+  },
 };
 
 export function chatAttachmentUrlRelease(queryClient: QueryClient) {
