@@ -199,11 +199,13 @@ export function roomsFileImages(message: ChatMessage | undefined): RoomsTypes.Ro
   return (message?.parts ?? []).flatMap((part) => (part.type === 'file' && roomsFileKind(part.mediaType) === 'images' ? [part] : []));
 }
 
-export function roomsFileIsMarkdown(file: Pick<RoomsTypes.RoomsFilePart, 'mediaType' | 'filename'>): boolean {
+export function roomsFileDocument(file: Pick<RoomsTypes.RoomsFilePart, 'mediaType' | 'filename'>): RoomsTypes.RoomsDocumentKind | undefined {
   const mediaType = file.mediaType.split(';', 1)[0].trim().toLowerCase();
   const filename = (file.filename ?? '').toLowerCase();
 
-  return ROOMS.markdownMediaTypes.some((type) => type === mediaType) || ROOMS.markdownExtensions.some((extension) => filename.endsWith(extension));
+  return ROOMS.documents.find(
+    (document) => document.mediaTypes.some((type) => type === mediaType) || document.extensions.some((extension) => filename.endsWith(extension)),
+  )?.kind;
 }
 
 export function roomsMessageCaption(metadata: ChatMessage['metadata']): string | undefined {

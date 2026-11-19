@@ -31,6 +31,7 @@ function DirectFileReaderRoute() {
       isError={document.isError}
       isPending={document.isPending}
       isTooLarge={document.isTooLarge}
+      kind={document.kind}
       name={document.name}
       text={document.text}
       onOpenChange={handleOpenChange}
