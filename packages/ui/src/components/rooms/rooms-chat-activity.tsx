@@ -20,7 +20,7 @@ interface RoomsChatActivityProps {
 
 export function RoomsChatActivity({ botName, activity, bots, draft, startedAt, waitingOn, waiting }: RoomsChatActivityProps) {
   const { hideVerbose } = useChatHideVerbose();
-  const elapsed = useChatElapsed(startedAt, !waiting);
+  const elapsed = useChatElapsed(startedAt, !waiting && !hideVerbose);
   const last = draft?.parts.filter((part) => part.type !== 'step-start').at(-1);
   const textSpeaks = activity === 'writing' && last?.type === 'text' && last.state === 'streaming';
   const toolRowSpeaks = !waiting && !waitingOn && !hideVerbose && last?.type === 'dynamic-tool' && toolRunning(last);
@@ -33,7 +33,7 @@ export function RoomsChatActivity({ botName, activity, bots, draft, startedAt, w
   const detail = match(waitingOn)
     .with('approval', () => m.rooms_activity_waiting_approval())
     .with('question', () => m.rooms_activity_waiting_question())
-    .otherwise(() => (waiting ? null : chatActivityDetail({ draft, bots })));
+    .otherwise(() => (waiting || hideVerbose ? null : chatActivityDetail({ draft, bots })));
 
   const peer = waiting || waitingOn ? undefined : chatActivityPeer(draft, bots);
   const label = waiting ? m.rooms_chat_waiting({ bot: botName }) : detail ?? BOT_ACTIVITY_LABELS[activity]();

@@ -3,7 +3,7 @@ import { useChatHideVerbose } from '@repo/client/react';
 import { m } from '@repo/i18n/client';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
-import { Linking, Pressable } from 'react-native';
+import { Linking, Pressable, View } from 'react-native';
 import { match } from 'ts-pattern';
 import { EventLabel, EventLine, EventList } from '@/components/ui/event';
 import { Markdown } from '@/components/ui/markdown';
@@ -32,8 +32,8 @@ interface ChatMessageProps {
   bot: Bot;
   bots: Bot[];
   bubble?: BotBubble;
-  isCollapsible?: boolean;
-  time?: string;
+  day?: string;
+  sentAt?: string;
   reactions: RoomsReactionGroup[];
   isLive: boolean;
   isSending: boolean;
@@ -49,8 +49,8 @@ export function ChatMessage({
   bot,
   bots,
   bubble,
-  isCollapsible = false,
-  time,
+  day,
+  sentAt,
   reactions,
   isLive,
   isSending,
@@ -71,27 +71,27 @@ export function ChatMessage({
   const reply = message.metadata?.replyTo;
   const firstText = segments.flatMap((segment) => (segment.kind === 'bubbles' ? segment.parts : [])).find((part) => part.kind === 'markdown');
 
-  const timeLabel = time ? (
+  const dayLabel = day ? (
     <Text
       className="my-3"
       tone="muted"
       variant="message-time"
     >
-      {time}
+      {day}
     </Text>
   ) : null;
 
   if (message.role === 'system') {
     return (
       <>
-        {timeLabel}
+        {dayLabel}
         <ChatNotice bots={bots} message={message} />
       </>
     );
   }
 
   if (segments.length === 0) {
-    return null;
+    return dayLabel;
   }
 
   function openLink(url: string) {
@@ -110,8 +110,6 @@ export function ChatMessage({
           bubble={bubble}
           from={from}
           key={text.key}
-          readLessLabel={m.rooms_chat_read_less()}
-          readMoreLabel={isCollapsible ? m.rooms_chat_read_more() : undefined}
         >
           {text === firstText && reply ? <MessageQuote>{m.rooms_chat_reply_quote({ name: reply.authorName, text: reply.text })}</MessageQuote> : null}
           <Markdown isStreaming={text.isStreaming} onLinkPress={openLink}>{mentionMarkdown({ text: text.text, bots })}</Markdown>
@@ -146,7 +144,7 @@ export function ChatMessage({
 
   return (
     <>
-      {timeLabel}
+      {dayLabel}
       {steps ? (
         <EventList>
           <Pressable
@@ -213,6 +211,11 @@ export function ChatMessage({
         groups={reactions}
         onToggle={canReact ? onReact : undefined}
       />
+      {sentAt && !isLive && !isSending ? (
+        <View className="items-center px-5 pb-1">
+          <Text tone="muted" variant="caption">{sentAt}</Text>
+        </View>
+      ) : null}
     </>
   );
 }

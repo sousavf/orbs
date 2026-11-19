@@ -3,7 +3,7 @@ import { useChatHideVerbose } from '@repo/client/react';
 import { useLongPress } from '@repo/client/web';
 import { m } from '@repo/i18n/client';
 import { EventLine, EventList } from '@repo/ui/ai/event';
-import { Message, MessageClamp, MessageContent, MessageStack } from '@repo/ui/ai/message';
+import { Message, MessageContent, MessageStack } from '@repo/ui/ai/message';
 import { Response } from '@repo/ui/ai/response';
 import { htmlReplyPage } from '@repo/ui/html.utils';
 import { MENTION_ALLOWED_TAGS } from '@repo/ui/mention.constants';
@@ -34,7 +34,6 @@ interface RoomsChatMessageProps {
   name: string
   bot?: ToolBot
   live?: boolean
-  isCollapsible?: boolean
   hasActions?: boolean
   reacting?: boolean
   reactions?: ReactTypes.ReactNode
@@ -48,7 +47,6 @@ export function RoomsChatMessage({
   name,
   bot,
   live = false,
-  isCollapsible = false,
   hasActions = false,
   reacting = false,
   reactions,
@@ -218,15 +216,7 @@ export function RoomsChatMessage({
 
                 return (
                   <MessageContent data-quote-id={message.id}>
-                    {isCollapsible ? (
-                      <MessageClamp
-                        collapseLabel={m.rooms_chat_read_less()}
-                        expandLabel={m.rooms_chat_read_more()}
-                        id={`${botId}:${key}`}
-                      >
-                        {textContent}
-                      </MessageClamp>
-                    ) : textContent}
+                    {textContent}
                   </MessageContent>
                 );
               })

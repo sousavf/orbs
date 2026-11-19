@@ -1,12 +1,10 @@
 import { roomsImageFrame } from '@repo/client/client';
 import { cva } from 'cva';
-import { LinearGradient } from 'expo-linear-gradient';
 import { FileText } from 'lucide-react-native';
 import { useState } from 'react';
 import { Image, Pressable, ScrollView, View } from 'react-native';
 import { useCSSVariable } from 'uniwind';
 import { cn } from '@/lib/cn';
-import { Button } from './button';
 import { Icon } from './icon';
 import { markdownColorContext } from './markdown';
 import { Text, textContext } from './text';
@@ -44,12 +42,6 @@ const messageBubbleVariants = cva({
   },
 });
 
-/** Height a long past message is cut to until it is opened. `overflow: scroll` clips like `hidden`, but lets Yoga measure the content at full height. */
-const MESSAGE_CLAMP_HEIGHT = 320;
-
-/** The last lines fade into the bubble colour, like the web mask. */
-const MESSAGE_CLAMP_FADE = 48;
-
 type MessageFrom = NonNullable<VariantProps<typeof messageVariants>['from']>;
 
 interface MessageProps extends ViewProps {
@@ -75,20 +67,12 @@ interface MessageBubbleProps extends ViewProps {
   wide?: boolean;
   /** The bot's colour for the owner's bubbles; the primary colour when absent. */
   bubble?: BotBubble;
-  /** Caps a long bubble at a fixed height, with a toggle that shows the rest. */
-  readMoreLabel?: string;
-  readLessLabel?: string;
 }
 
-export function MessageBubble({ from, wide = false, bubble, readMoreLabel, readLessLabel, className, style, children, ...props }: MessageBubbleProps) {
-  const [onPrimary, primary, secondary] = useCSSVariable(['--color-primary-foreground', '--color-primary', '--color-secondary']).map(String);
-  const [isOpen, setIsOpen] = useState(false);
-  const [height, setHeight] = useState(0);
+export function MessageBubble({ from, wide = false, bubble, className, style, children, ...props }: MessageBubbleProps) {
+  const [onPrimary] = useCSSVariable(['--color-primary-foreground']).map(String);
   const markdownColor = from === 'user' ? bubble?.foreground ?? onPrimary : undefined;
   const tone = from === 'user' && !bubble ? 'on-primary' : 'default';
-  const fill = from === 'user' ? bubble?.background ?? primary : secondary;
-  const isCapped = readMoreLabel !== undefined && !isOpen;
-  const isLong = readMoreLabel !== undefined && height > MESSAGE_CLAMP_HEIGHT;
 
   return (
     <View
@@ -98,27 +82,7 @@ export function MessageBubble({ from, wide = false, bubble, readMoreLabel, readL
     >
       <markdownColorContext.Provider value={markdownColor}>
         <textContext.Provider value={{ tone }}>
-          <View style={isCapped ? { maxHeight: MESSAGE_CLAMP_HEIGHT, overflow: 'scroll' } : undefined}>
-            <View onLayout={(event) => setHeight(event.nativeEvent.layout.height)}>{children}</View>
-            {isCapped && isLong ? (
-              <LinearGradient
-                colors={[`${fill.slice(0, 7)}00`, fill]}
-                pointerEvents="none"
-                style={{ position: 'absolute', right: 0, bottom: 0, left: 0, height: MESSAGE_CLAMP_FADE }}
-              />
-            ) : null}
-          </View>
-          {isLong ? (
-            <Button
-              accessibilityState={{ expanded: isOpen }}
-              className={cn('self-center active:bg-foreground/10', isOpen ? 'mt-1.5' : '-mt-3')}
-              size="xs"
-              variant="ghost"
-              onPress={() => setIsOpen(!isOpen)}
-            >
-              <Text style={bubble && from === 'user' ? { color: bubble.foreground } : undefined} tone={tone}>{isOpen ? readLessLabel : readMoreLabel}</Text>
-            </Button>
-          ) : null}
+          {children}
         </textContext.Provider>
       </markdownColorContext.Provider>
     </View>

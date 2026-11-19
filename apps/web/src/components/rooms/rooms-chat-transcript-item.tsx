@@ -11,11 +11,11 @@ interface RoomsChatTranscriptItemProps {
   message: ChatMessage
   bot: Bot
   groups: RoomsReactionGroup[]
-  time: string | undefined
+  day: string | undefined
+  sentAt: { iso: string, label: string } | undefined
   isFocused: boolean
   isLive: boolean
   isSending: boolean
-  isCollapsible: boolean
   isReadOnly: boolean
   onReply: (message: ChatMessage) => void
 }
@@ -24,17 +24,17 @@ export function RoomsChatTranscriptItem({
   message,
   bot,
   groups,
-  time,
+  day,
+  sentAt,
   isFocused,
   isLive,
   isSending,
-  isCollapsible,
   isReadOnly,
   onReply,
 }: RoomsChatTranscriptItemProps) {
   return (
     <MessageScrollerItem className={isSending ? 'opacity-60' : undefined} variant={isFocused ? 'highlight' : 'default'}>
-      {time ? <p className="my-3 zoom-[0.8] text-center text-xs text-muted-foreground">{time}</p> : null}
+      {day ? <p className="my-3 zoom-[0.8] text-center text-xs text-muted-foreground">{day}</p> : null}
       {match(message.role)
         .with('system', () => <RoomsChatNotice message={message} />)
         .with('assistant', () => (
@@ -43,7 +43,6 @@ export function RoomsChatTranscriptItem({
             botId={bot.id}
             groups={groups}
             hasActions={!isLive && !isReadOnly}
-            isCollapsible={isCollapsible}
             live={isLive}
             message={message}
             name={message.metadata?.authorName ?? bot.name}
@@ -54,13 +53,20 @@ export function RoomsChatTranscriptItem({
           <RoomsChatMessage
             botId={bot.id}
             hasActions={!isSending && !isReadOnly}
-            isCollapsible={isCollapsible}
             message={message}
             name={message.metadata?.authorName ?? ''}
             reactions={groups.length > 0 ? <RoomsChatReactions groups={groups} /> : undefined}
             onReply={() => onReply(message)}
           />
         ))}
+      {sentAt && message.role !== 'system' && message.parts.length > 0 && !isLive && !isSending ? (
+        <time
+          className="block px-1 pb-1 text-center text-xxs text-muted-foreground tabular-nums"
+          dateTime={sentAt.iso}
+        >
+          {sentAt.label}
+        </time>
+      ) : null}
     </MessageScrollerItem>
   );
 }

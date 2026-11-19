@@ -1,9 +1,6 @@
-import { useState } from 'react';
-import { match } from 'ts-pattern';
 import { cn } from '../../lib/cn';
-import { Button } from '../button';
 import type { UIMessage } from 'ai';
-import type { HTMLAttributes, ReactNode } from 'react';
+import type { HTMLAttributes } from 'react';
 
 const messageOutline = 'rounded-3xl border border-input';
 
@@ -58,62 +55,3 @@ export function MessageContent({ children, className, ...props }: HTMLAttributes
   );
 }
 
-const MESSAGE_CLAMP_HEIGHT = 320;
-
-const MESSAGE_CLAMP_FADE = 'linear-gradient(to bottom, black calc(100% - 1.75rem), transparent)';
-
-const messageClampOpen = new Set<string>();
-
-export function MessageClamp({ id, expandLabel, collapseLabel, children }: { id: string, expandLabel: string, collapseLabel: string, children: ReactNode }) {
-  const [isOpen, setIsOpen] = useState(() => messageClampOpen.has(id));
-  const [isLong, setIsLong] = useState(false);
-  const isFaded = isLong && !isOpen;
-
-  const measure = (content: HTMLDivElement | null) => {
-    if (!content) {
-      return;
-    }
-
-    const observer = new ResizeObserver(() => setIsLong(content.offsetHeight > MESSAGE_CLAMP_HEIGHT));
-    observer.observe(content);
-
-    return () => observer.disconnect();
-  };
-
-  const toggle = () => {
-    match(isOpen)
-      .with(true, () => messageClampOpen.delete(id))
-      .with(false, () => messageClampOpen.add(id))
-      .exhaustive();
-
-    setIsOpen(!isOpen);
-  };
-
-  const button = (
-    <Button
-      aria-expanded={isOpen}
-      className={cn('self-center hover:bg-foreground/10', !isOpen && 'absolute bottom-0 left-1/2 -translate-x-1/2')}
-      size="xs"
-      type="button"
-      variant="ghost"
-      onClick={toggle}
-    >
-      {isOpen ? collapseLabel : expandLabel}
-    </Button>
-  );
-
-  return (
-    <>
-      <div className="relative flex flex-col">
-        <div
-          className={cn(!isOpen && 'overflow-hidden')}
-          style={isOpen ? undefined : { maxHeight: MESSAGE_CLAMP_HEIGHT, maskImage: isFaded ? MESSAGE_CLAMP_FADE : undefined }}
-        >
-          <div className="flex flex-col gap-2" ref={measure}>{children}</div>
-        </div>
-        {isFaded ? button : null}
-      </div>
-      {isLong && isOpen ? button : null}
-    </>
-  );
-}
