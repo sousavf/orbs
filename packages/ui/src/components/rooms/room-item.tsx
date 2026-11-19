@@ -1,10 +1,12 @@
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { MENTION } from '@repo/client/client';
+import { useChatWaiting } from '@repo/client/react';
 import { useChatDraft } from '@repo/client/web';
 import { m } from '@repo/i18n/client';
 import { Link, useMatch } from '@tanstack/react-router';
 import { useState } from 'react';
+import { match } from 'ts-pattern';
 import IconBellOff from '~icons/lucide/bell-off';
 import IconEllipsisVertical from '~icons/lucide/ellipsis-vertical';
 import IconPin from '~icons/lucide/pin';
@@ -37,6 +39,7 @@ export function RoomItem({ chat, isSortable = true }: RoomItemProps) {
   const { listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: chat.botId, disabled: !isSortable });
   const isActive = current?.params.handle === chat.handle;
   const { draft } = useChatDraft(chat.botId);
+  const isWaiting = useChatWaiting(chat.botId);
   const lastActivity = chat.lastMessage?.preview ?? m.rooms_last_activity_none();
 
   return (
@@ -87,12 +90,30 @@ export function RoomItem({ chat, isSortable = true }: RoomItemProps) {
                 size={state === 'collapsed' && !isMobile && buttonSize ? buttonSize : 32}
                 variant="row"
               />
-              {chat.hasUnread && !isActive ? (
-                <>
-                  <span aria-hidden="true" className="absolute inset-e-1.5 top-1.5 size-1.5 rounded-full bg-orange-400 ring-1 ring-sidebar" />
-                  <span className="sr-only">{m.rooms_unread()}</span>
-                </>
-              ) : null}
+              {match({
+                isWaiting,
+                isWorking: chat.isWorking,
+                isUnread: chat.hasUnread && !isActive,
+              })
+                .with({ isWaiting: true }, () => (
+                  <>
+                    <span aria-hidden="true" className="absolute inset-e-0 top-0 size-2 rounded-full bg-red-500 ring-2 ring-sidebar" />
+                    <span className="sr-only">{m.rooms_waiting()}</span>
+                  </>
+                ))
+                .with({ isWorking: true }, () => (
+                  <>
+                    <span aria-hidden="true" className="absolute inset-e-0 top-0 size-2 rounded-full bg-green-500 ring-2 ring-sidebar" />
+                    <span className="sr-only">{m.rooms_working()}</span>
+                  </>
+                ))
+                .with({ isUnread: true }, () => (
+                  <>
+                    <span aria-hidden="true" className="absolute inset-e-0 top-0 size-2 rounded-full bg-orange-400 ring-2 ring-sidebar" />
+                    <span className="sr-only">{m.rooms_unread()}</span>
+                  </>
+                ))
+                .otherwise(() => null)}
             </span>
             <span className="grid min-w-0 flex-1 leading-tight group-data-[collapsible=icon]:hidden">
               <span className="flex min-w-0 items-center gap-1.5">

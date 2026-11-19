@@ -37,7 +37,10 @@ export function BotHomeRow({ chat }: BotHomeRowProps) {
               </View>
               <View className="flex-row items-center gap-2">
                 <ItemDescription className="flex-1" numberOfLines={1}>{chat.lastMessage?.preview ?? m.rooms_last_activity_none()}</ItemDescription>
-                {chat.hasUnread ? <Badge accessibilityLabel={m.rooms_unread()} variant="unread" /> : null}
+                {match(chat)
+                  .with({ isRunning: true }, () => <Badge accessibilityLabel={m.rooms_working()} variant="working" />)
+                  .with({ hasUnread: true }, () => <Badge accessibilityLabel={m.rooms_unread()} variant="unread" />)
+                  .otherwise(() => null)}
               </View>
             </ItemContent>
           </Item>
