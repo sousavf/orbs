@@ -4,6 +4,7 @@ import { watchConversationContexts } from '../../contexts';
 import { readConversation, watchConversation } from '../../conversation';
 import { watchConversations } from '../../conversations';
 import { watchNotifications } from '../../notifications';
+import { roomsFileDocument } from '../rooms/rooms.utils';
 import { CHAT } from './chat.constants';
 import type { ChatAttachmentUrlParams, ChatHistoryParams } from '../../types/chat.types';
 import type { RpcContextValue } from '../../types/rpc.types';
@@ -96,14 +97,20 @@ export const chatQueries = {
     });
   },
 
-  attachmentText({ client, rpc }: RpcContextValue, input: ChatAttachmentUrlParams) {
+  attachmentDocument({ client, rpc }: RpcContextValue, input: ChatAttachmentUrlParams) {
     return queryOptions({
-      queryKey: [...rpc.attachments.download.queryKey({ input }), CHAT.attachmentTextKey],
+      queryKey: [...rpc.attachments.download.queryKey({ input }), CHAT.attachmentDocumentKey],
       queryFn: async ({ signal }) => {
         const file = await client.attachments.download(input, { signal });
-        const isTooLarge = file.size > CHAT.documentMaxBytes;
+        const kind = roomsFileDocument({ mediaType: file.type, filename: file.name }) ?? 'markdown';
+        const isTooLarge = kind === 'markdown' && file.size > CHAT.documentMaxBytes;
 
-        return { name: file.name, isTooLarge, text: isTooLarge ? '' : await file.text() };
+        return {
+          name: file.name,
+          kind,
+          isTooLarge,
+          text: kind === 'markdown' && !isTooLarge ? await file.text() : '',
+        };
       },
       staleTime: Number.POSITIVE_INFINITY,
     });

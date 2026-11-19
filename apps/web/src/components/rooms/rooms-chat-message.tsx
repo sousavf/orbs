@@ -1,4 +1,4 @@
-import { CHAT, chatActivitySteps, chatActivityStepsLabel, roomsFileIsMarkdown, toolBlocks } from '@repo/client/client';
+import { CHAT, chatActivitySteps, chatActivityStepsLabel, roomsFileDocument, toolBlocks } from '@repo/client/client';
 import { useChatHideVerbose } from '@repo/client/react';
 import { useLongPress } from '@repo/client/web';
 import { m } from '@repo/i18n/client';
@@ -16,7 +16,7 @@ import { RoomsChatTools } from '@repo/ui/rooms/rooms-chat-tools';
 import { useNavigate, useParams } from '@tanstack/react-router';
 import { isFileUIPart } from 'ai';
 import { Fragment, useState } from 'react';
-import { match } from 'ts-pattern';
+import { match, P } from 'ts-pattern';
 import { RoomsChatArtifact } from '@/components/rooms/rooms-chat-artifact';
 import { RoomsChatEvents } from '@/components/rooms/rooms-chat-events';
 import { RoomsChatGif } from '@/components/rooms/rooms-chat-gif';
@@ -116,8 +116,8 @@ export function RoomsChatMessage({
     const params = { handle: chat, attachmentId: file.url.slice(CHAT.attachmentScheme.length) };
     const search = { entryId: entry };
 
-    void match(roomsFileIsMarkdown(file))
-      .with(true, () => navigate({
+    void match(roomsFileDocument(file))
+      .with(P.nonNullable, () => navigate({
         to: '/rooms/direct/$handle/files/$attachmentId',
         params,
         search,

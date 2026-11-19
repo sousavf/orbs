@@ -189,6 +189,7 @@
   "rooms_document_empty": "This file is empty.",
   "rooms_document_error": "The file could not be loaded.",
   "rooms_document_too_large": "This file is too large to preview. Download it to read it.",
+  "rooms_document_pdf_fallback": "This PDF can't be shown here. Download it to read it.",
   "rooms_media_viewer_from": "From {name} · {time}",
   "rooms_media_viewer_previous": "Previous image",
   "rooms_media_viewer_next": "Next image",

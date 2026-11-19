@@ -1,4 +1,4 @@
-import { CHAT, roomsFileIsMarkdown, roomsFileRows, roomsImageFrame } from '@repo/client/client';
+import { CHAT, roomsFileDocument, roomsFileRows, roomsImageFrame } from '@repo/client/client';
 import { useChatAttachmentUrl } from '@repo/client/web';
 import { m } from '@repo/i18n/client';
 import { useInView } from 'motion/react';
@@ -123,7 +123,7 @@ function RoomsChatFile({ botId, file, onOpen }: RoomsChatFileProps) {
     </>
   );
 
-  if (onOpen && roomsFileIsMarkdown(file) && file.url.startsWith(CHAT.attachmentScheme)) {
+  if (onOpen && roomsFileDocument(file) !== undefined && file.url.startsWith(CHAT.attachmentScheme)) {
     return (
       <button aria-label={m.rooms_media_open({ name: file.filename ?? '' })} className={cn(pill, 'cursor-pointer')} type="button" onClick={() => onOpen(file)}>
         {label}

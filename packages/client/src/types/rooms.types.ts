@@ -6,6 +6,8 @@ export type RoomsChat = UniversalTypes.ConversationListItem;
 
 export type RoomsFilePart = Extract<ChatMessage['parts'][number], { type: 'file' }>;
 
+export type RoomsDocumentKind = 'markdown' | 'pdf';
+
 export type RoomsFileRow =
   | { key: string; kind: 'images'; files: RoomsFilePart[]; hidden: number }
   | { key: string; kind: 'video' | 'audio' | 'file'; file: RoomsFilePart };
